@@ -1,4 +1,4 @@
-# A desktop environment using "Gnome"
+# A desktop environment using "MATE"
 
 import archinstall
 
@@ -12,8 +12,7 @@ def _prep_function(*args, **kwargs):
 	for more input before any other installer steps start.
 	"""
 
-	# Gnome optionally supports xorg, we'll install it since it also
-	# includes graphic driver setups (this might change in the future)
+	# MATE requires a functional xorg installation.
 	profile = archinstall.Profile(None, 'xorg')
 	with profile.load_instructions(namespace='xorg.py') as imported:
 		if hasattr(imported, '_prep_function'):
@@ -22,16 +21,14 @@ def _prep_function(*args, **kwargs):
 			print('Deprecated (??): xorg profile has no _prep_function() anymore')
 
 # Ensures that this code only gets executed if executed
-# through importlib.util.spec_from_file_location("gnome", "/somewhere/gnome.py")
-# or through conventional import gnome
-if __name__ == 'gnome':
+# through importlib.util.spec_from_file_location("mate", "/somewhere/mate.py")
+# or through conventional import mate
+if __name__ == 'mate':
 	# Install dependency profiles
 	installation.install_profile('xorg')
 
-	# Install the application gnome from the template under /applications/
-	gnome = archinstall.Application(installation, 'gnome')
-	gnome.install()
+	# Install the application mate from the template under /applications/
+	mate = archinstall.Application(installation, 'mate')
+	mate.install()
 
-	installation.enable_service('gdm') # Gnome Display Manager
-	# We could also start it via xinitrc since we do have Xorg,
-	# but for gnome that's deprecated and wayland is preferred.
+	installation.enable_service('lightdm') # Light Display Manager
